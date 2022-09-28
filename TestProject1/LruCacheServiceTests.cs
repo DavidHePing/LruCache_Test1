@@ -35,10 +35,6 @@ public class LruCacheServiceTests
 
         var result = lruCache.Get("0");
         result.Should().Be("0");
-
-        lruCache.Put("5", "5");
-        result = lruCache.Get("1");
-        result.Should().Be(null);
     }
     
     [Test]
@@ -58,5 +54,8 @@ public class LruCacheServiceTests
         
         var result = lruCache.Get("1");
         result.Should().Be(null);
+        
+        result = lruCache.Get("0");
+        result.Should().Be("0");
     }
 }
