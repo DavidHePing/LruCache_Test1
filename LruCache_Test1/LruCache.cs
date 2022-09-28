@@ -39,11 +39,16 @@ public class LruCache
         if (node == _first)
         {
             _first = _first.Next;
+
+            if (_first != null)
+            {
+                _first.Previous = null;
+            }
         }
         
         if (node == _last)
         {
-            _last = _last.Previous;
+            SetLastNode(_last.Previous);
         }
 
         if (node.Previous != null)
@@ -65,8 +70,7 @@ public class LruCache
         if (_map.Count >= _length)
         {
             _map.Remove(_last.Key);
-            _last = _last.Previous;
-            _last.Next = null;
+            SetLastNode(_last.Previous);
         }
 
         var newNode = new Node()
@@ -80,7 +84,7 @@ public class LruCache
 
         if (_last == null)
         {
-            _last = newNode;
+            SetLastNode(newNode);
         }
     }
 
@@ -96,13 +100,23 @@ public class LruCache
             _first.Previous = node;
             node.Next = _first;
             
-            if (node == _last)
+            if (node == _last )
             {
-                _last = _last.Previous;
+                SetLastNode(_last.Previous);
             }
         }
 
         node.Previous = null;
         _first = node;
+    }
+
+    private void SetLastNode(Node? node)
+    {
+        _last = node;
+
+        if (_last != null)
+        {
+            _last.Next = null;
+        }
     }
 }
