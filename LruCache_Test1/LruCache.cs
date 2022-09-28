@@ -42,6 +42,10 @@ public class LruCache
         {
             _first = _first.Next;
         }
+        else if (node == _last)
+        {
+            _last = _last.Previous;
+        }
 
         node.Previous.Next = node.Next;
     }
@@ -50,37 +54,53 @@ public class LruCache
     {
         if (_map.ContainsKey(key))
         {
-            var node = _map[key];
-            node.Value = value;
+            _map[key].Value = value;
 
-            SetNodeToFirst(node);
+            SetNodeToFirst(_map[key]);
             return;
         }
 
         if (_map.Count >= _length)
         {
             _map.Remove(_last.Key);
-            _last.Previous.Next = null;
             _last = _last.Previous;
+            _last.Next = null;
         }
 
-        _map.Add(key, new Node()
+        var newNode = new Node()
         {
-            Previous = _last,
             Key = key,
             Value = value
-        });
+        };
+        
+        _map.Add(key, newNode);
+        SetNodeToFirst(newNode);
 
-        _last = _map[key];
+        if (_last == null)
+        {
+            _last = newNode;
+        }
     }
 
     private void SetNodeToFirst(Node node)
     {
-        if (node != _first)
+        if (node.Previous != null)
         {
             node.Previous.Next = node.Next;
-            node.Next = _first;
-            _first = node;
         }
+
+        if (_first != null)
+        {
+            _first.Previous = node;
+            node.Next = _first;
+            
+            if (node == _last)
+            {
+                _last = _last.Previous;
+            }
+        }
+
+        node.Previous = null;
+        _first = node;
     }
 }
