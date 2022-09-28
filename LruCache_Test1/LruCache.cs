@@ -42,12 +42,16 @@ public class LruCache
         {
             _first = _first.Next;
         }
-        else if (node == _last)
+        
+        if (node == _last)
         {
             _last = _last.Previous;
         }
 
-        node.Previous.Next = node.Next;
+        if (node.Previous != null)
+        {
+            node.Previous.Next = node.Next;
+        }
     }
     
     public void Put(string key, string value)

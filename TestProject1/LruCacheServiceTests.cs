@@ -58,4 +58,25 @@ public class LruCacheServiceTests
         result = lruCache.Get("0");
         result.Should().Be("0");
     }
+
+    [Test]
+    public void Delete_Get_Null_If_Key_Is_Delete()
+    {
+        var lruCache = new LruCache(5);
+        lruCache.Put("0", "0");
+        lruCache.Delete("0");
+        
+        var result = lruCache.Get("0");
+        result.Should().Be(null);
+        
+        lruCache.Put("0", "0");
+        lruCache.Put("1", "1");
+        lruCache.Delete("1");
+        
+        result = lruCache.Get("0");
+        result.Should().Be("0");
+        
+        result = lruCache.Get("1");
+        result.Should().Be(null);
+    }
 }
