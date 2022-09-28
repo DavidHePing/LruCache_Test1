@@ -79,4 +79,26 @@ public class LruCacheServiceTests
         result = lruCache.Get("1");
         result.Should().Be(null);
     }
+
+    [Test]
+    public void All()
+    {
+        var lruCache = new LruCache(5);
+        
+        lruCache.Put("0", "0");
+        lruCache.Put("1", "1");
+        lruCache.Put("2", "2");
+        lruCache.Put("3", "3");
+        lruCache.Put("4", "4");
+        
+        lruCache.Delete("3");
+        lruCache.Put("5", "5");
+        
+        lruCache.Get("0");
+        lruCache.Get("1");
+        lruCache.Put("6", "6");
+        
+        var result = lruCache.Get("2");
+        result.Should().Be(null);
+    }
 }

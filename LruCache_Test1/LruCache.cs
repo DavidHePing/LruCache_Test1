@@ -20,11 +20,9 @@ public class LruCache
         }
         else
         {
-            var node = _map[key];
+            SetNodeToFirst(_map[key]);
 
-            SetNodeToFirst(node);
-
-            return node.Value;
+            return _map[key].Value;
         }
     }
 
